@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp
 public class PruebaEncoder extends OpMode {
     private DcMotor motor;
-    private static final double TICKS_PER_REVOLUTION = 1120; // Update based on your motor's gear ratio
+    private static final double TICKS_PER_REVOLUTION = 8192; // Update based on your motor's gear ratio
     private static final double MOTOR_POWER = 0.1;
     private double targetPosition = 0;
 
@@ -29,7 +29,7 @@ public class PruebaEncoder extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.a) {
-            moveMotorRevolutions(10);
+            moveMotorRevolutions(2);
         }
         if (gamepad1.b) {
             stopMotor();
@@ -38,7 +38,7 @@ public class PruebaEncoder extends OpMode {
             moveMotorRevolutions(14);
         }
         while (motor.isBusy()) {
-            telemetry.addLine("Dentro del Busy");
+            telemetry.addData("Motor Position (revolutions)", motor.getCurrentPosition() / TICKS_PER_REVOLUTION);
             telemetry.update();
         }
 
@@ -54,6 +54,7 @@ public class PruebaEncoder extends OpMode {
         motor.setTargetPosition((int) targetPosition);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setPower(MOTOR_POWER);
+//        motor.setPower(0);
     }
     private void stopMotor() {
         motor.setPower(0);

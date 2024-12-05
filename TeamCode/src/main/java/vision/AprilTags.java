@@ -49,10 +49,13 @@ public class AprilTags extends LinearOpMode
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
     // You will need to do your own calibration for other configurations!
-    double fx = 578.272;
-    double fy = 578.272;
-    double cx = 402.145;
-    double cy = 221.506;
+    /* Fx: 711.078 Fy: 711.078
+Optical center - Cx: 330.999 Cy: 237.076
+Radial distortion (Brown's Model)*/
+    double fx = 711.078;
+    double fy = 711.078;
+    double cx = 330.999;
+    double cy = 237.076;
 
     // UNITS ARE METERS
     double tagsize = 0.166;
@@ -214,9 +217,9 @@ public class AprilTags extends LinearOpMode
         Orientation rot = Orientation.getOrientation(detection.pose.R, AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
 
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation X: %.2f m", detection.pose.x));
+        telemetry.addLine(String.format("Translation Y: %.2f m", detection.pose.y));
+        telemetry.addLine(String.format("Translation Z: %.2f m", detection.pose.z));
         telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", rot.firstAngle));
         telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", rot.secondAngle));
         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", rot.thirdAngle));

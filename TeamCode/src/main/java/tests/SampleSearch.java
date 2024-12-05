@@ -1,11 +1,11 @@
-
-package vision;
-
+package tests;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.*;
@@ -19,30 +19,29 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name = "Blob_Detection")
+@TeleOp(name = "SampleSearch")
 
-public class BlobDetection extends LinearOpMode {
+public class SampleSearch extends LinearOpMode {
 
+    public DcMotor leftFront, leftRear, rightFront, rightRear;
+    int tolerance = 25;
     double cX = 0;
     double cY = 0;
     double width = 0;
     boolean in_reachable_area = false;
 
-    private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
-    private static final int CAMERA_WIDTH = 640; // width  of wanted camera resolution
-    private static final int CAMERA_HEIGHT = 360; // height of wanted camera resolution
-
-    // Calculate the distance using the formula
-    public static final double objectWidthInRealWorldUnits = 3.46;  // Replace with the actual width of the object in real-world units
+    private OpenCvCamera controlHubCam;
+    private static final int CAMERA_WIDTH = 640;
+    private static final int CAMERA_HEIGHT = 360;
+    public static final double objectWidthInRealWorldUnits = 3.46;
     public static final double focalLength = 560;
 
-    // Replace with the focal length of the camera in pixels
-
-    //18
     @Override
     public void runOpMode() {
 
         initOpenCV();
+        initMotores();
+        moveToSample();
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         FtcDashboard.getInstance().startCameraStream(controlHubCam, 30);
@@ -51,23 +50,24 @@ public class BlobDetection extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
             telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
             telemetry.addData("Distance in in", (getDistance(width)));
 
-
+            /*
             if (getDistance(width) < 18 && getDistance(width)>15){
-                telemetry.addLine("Is reachable");
-            }else{
+               telemetry.addLine("Is reachable");
+           }else{
                 telemetry.addLine("Is NOT reachable");
-            }
+           }
+            */
             telemetry.update();
         }
 
-        // Release resources
         controlHubCam.stopStreaming();
     }
 
-    private void initOpenCV() {
+    public void initOpenCV() {
 
         // Create an instance of the camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -116,13 +116,15 @@ public class BlobDetection extends LinearOpMode {
                 // Draw a dot at the centroid
                 String label = "(" + (int) cX + ", " + (int) cY + ")";
                 Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
-                Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
+                Imgproc.circle(input, new Point(cX, cY), 1, new Scalar(0, 255, 0), -1);
 
+                Point cameraCenter = new Point(CAMERA_WIDTH / 2, CAMERA_HEIGHT / 2);
+                Imgproc.circle(input, cameraCenter, 25, new Scalar(255, 0, 0), 2);
             }
             return input;
         }
 
-        private Mat preprocessFrame(Mat frame) {
+        public Mat preprocessFrame(Mat frame) {
             Mat hsvFrame = new Mat();
             Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
 
@@ -140,7 +142,7 @@ public class BlobDetection extends LinearOpMode {
             return yellowMask;
         }
 
-        private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
+        public MatOfPoint findLargestContour(List<MatOfPoint> contours) {
             double maxArea = 0;
             MatOfPoint largestContour = null;
 
@@ -154,14 +156,82 @@ public class BlobDetection extends LinearOpMode {
 
             return largestContour;
         }
-        private double calculateWidth(MatOfPoint contour) {
+        public double calculateWidth(MatOfPoint contour) {
             Rect boundingRect = Imgproc.boundingRect(contour);
             return boundingRect.width;
         }
 
     }
-    private static double getDistance(double width){
+    public static double getDistance(double width){
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
         return distance;
+    }
+
+    public void moveToSample() {
+        if (cX > (CAMERA_WIDTH / 2) + tolerance) {
+            moveRight(0.5);
+        }else if (cX < (CAMERA_WIDTH / 2) - tolerance) {
+            moveLeft(0.5);
+        }else if (Math.abs(cX - (CAMERA_WIDTH / 2)) <= tolerance) {
+                leftFront.setPower(0);
+                leftRear.setPower(0);
+                rightFront.setPower(0);
+                rightRear.setPower(0);
+        }else {
+            leftFront.setPower(0);
+            leftRear.setPower(0);
+            rightFront.setPower(0);
+            rightRear.setPower(0);
+        }
+        telemetry.addData("cX", cX);
+        telemetry.addData("Action", cX > (CAMERA_WIDTH / 2) + tolerance ? "Moving Right" :
+                cX < (CAMERA_WIDTH / 2) - tolerance ? "Moving Left" :
+                        "Center");
+        telemetry.update();
+    }
+    public void initMotores() {
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
+
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        rightRear.setDirection(DcMotor.Direction.FORWARD);
+
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+
+    public void moveForward(double power) {
+        leftFront.setPower(power);
+        leftRear.setPower(power);
+        rightFront.setPower(power);
+        rightRear.setPower(power);
+    }
+
+    public void moveBackward(double power) {
+        leftFront.setPower(-power);
+        leftRear.setPower(-power);
+        rightFront.setPower(-power);
+        rightRear.setPower(-power);
+    }
+
+    public void moveLeft(double power) {
+        leftFront.setPower(-power);
+        leftRear.setPower(power);
+        rightFront.setPower(power);
+        rightRear.setPower(-power);
+    }
+
+    public void moveRight(double power) {
+        leftFront.setPower(power);
+        leftRear.setPower(-power);
+        rightFront.setPower(-power);
+        rightRear.setPower(power);
     }
 }
