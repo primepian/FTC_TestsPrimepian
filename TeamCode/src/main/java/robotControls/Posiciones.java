@@ -22,10 +22,8 @@ public class Posiciones {
     public Servo Articulacion_Barredora1;
     public Servo Articulacion_Barredora2;
 
-
-    public double targetPosition = 0;
-
-
+    //vars
+    private static final double TICKS_PER_REVOLUTION = 537.7;   //8192
 
     //FUNCIONES DE POSICIONES
     public void LanzarBarredora(){
@@ -37,10 +35,16 @@ public class Posiciones {
         LBarredora2.setPosition(0);
     }
     public void RecogerSpecimen(){
+        elevador(0);
+        moverBrazo(0);
+        moverMano(0.5);
+        servo_Garra.setPosition(1.0);
 
     }
     public void RecogerSample(){
-
+        elevador(0);
+        moverBrazo(0);
+        moverMano(0.5);
     }
 
 //FUNCIONES DE INICIACION
@@ -88,5 +92,10 @@ public class Posiciones {
         elevador1.setPower(-POWER);
         elevador2.setPower(-POWER);
     }
-
+    public void elevador(int targetPos){
+        elevador1.setTargetPosition((int)targetPos);
+        elevador2.setTargetPosition((int)targetPos);
+        elevador1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevador2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 }

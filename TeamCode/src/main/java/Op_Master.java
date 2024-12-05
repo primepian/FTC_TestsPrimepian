@@ -15,17 +15,27 @@ public class Op_Master  extends OpMode {
 
     @Override
     public void init(){
-        chasisovic.runOpMode();
+    chasisovic.chasisoico();
     misPosiciones.initBarredora();
     misPosiciones.initGarra();
     misPosiciones.initElevador();
     }
-
+/*
+* ABRIR GARRA [x]
+* MOVER BRAZO [left_stick_y]
+* ARTICULACION GARRA[right_stick_y]
+* CORREDERA GARRA [y,a]
+* ELEVADOR [right,left trigger]
+* BARREDORA [Gpad1{y,a}]
+* RECOGER SAMPLE [dpad_up]
+* RECOGER SPECIMEN[dpad_down]
+*/
     @Override
     public void loop() {
+        chasisovic.chasisoico();
         //GARRA
         if (gamepad2.x && !garra_abierta){  //abrir garra
-            misPosiciones.servo_Garra.setPosition(0);
+            misPosiciones.servo_Garra.setPosition(1);
             garra_abierta = true;
         }
         if (gamepad2.x && garra_abierta){  //cerrar garra
