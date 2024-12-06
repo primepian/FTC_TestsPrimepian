@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.*;
@@ -24,11 +23,9 @@ import java.util.List;
 public class SampleSearch extends LinearOpMode {
 
     public DcMotor leftFront, leftRear, rightFront, rightRear;
-    int tolerance = 25;
     double cX = 0;
     double cY = 0;
     double width = 0;
-    boolean in_reachable_area = false;
 
     private OpenCvCamera controlHubCam;
     private static final int CAMERA_WIDTH = 640;
@@ -46,24 +43,13 @@ public class SampleSearch extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         FtcDashboard.getInstance().startCameraStream(controlHubCam, 30);
 
-
         waitForStart();
-
         while (opModeIsActive()) {
 
             telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
             telemetry.addData("Distance in in", (getDistance(width)));
-
-            /*
-            if (getDistance(width) < 18 && getDistance(width)>15){
-               telemetry.addLine("Is reachable");
-           }else{
-                telemetry.addLine("Is NOT reachable");
-           }
-            */
             telemetry.update();
         }
-
         controlHubCam.stopStreaming();
     }
 
@@ -83,6 +69,7 @@ public class SampleSearch extends LinearOpMode {
         controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
     }
     class YellowBlobDetectionPipeline extends OpenCvPipeline {
+
         @Override
         public Mat processFrame(Mat input) {
             // Preprocess the frame to detect yellow regions
@@ -110,19 +97,22 @@ public class SampleSearch extends LinearOpMode {
                 Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 60), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
                 // Calculate the centroid of the largest contour
                 Moments moments = Imgproc.moments(largestContour);
-                cX = moments.get_m10() / moments.get_m00();
-                cY = moments.get_m01() / moments.get_m00();
-
+                if (moments.get_m00() != 0) {
+                    cX = moments.get_m10() / moments.get_m00();
+                    cY = moments.get_m01() / moments.get_m00();
+                }
                 // Draw a dot at the centroid
                 String label = "(" + (int) cX + ", " + (int) cY + ")";
                 Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
                 Imgproc.circle(input, new Point(cX, cY), 1, new Scalar(0, 255, 0), -1);
 
+                // Draw the camera's center point for reference
                 Point cameraCenter = new Point(CAMERA_WIDTH / 2, CAMERA_HEIGHT / 2);
                 Imgproc.circle(input, cameraCenter, 25, new Scalar(255, 0, 0), 2);
             }
             return input;
         }
+
 
         public Mat preprocessFrame(Mat frame) {
             Mat hsvFrame = new Mat();
@@ -168,27 +158,21 @@ public class SampleSearch extends LinearOpMode {
     }
 
     public void moveToSample() {
-        if (cX > (CAMERA_WIDTH / 2) + tolerance) {
-            moveRight(0.5);
-        }else if (cX < (CAMERA_WIDTH / 2) - tolerance) {
-            moveLeft(0.5);
-        }else if (Math.abs(cX - (CAMERA_WIDTH / 2)) <= tolerance) {
-                leftFront.setPower(0);
-                leftRear.setPower(0);
-                rightFront.setPower(0);
-                rightRear.setPower(0);
-        }else {
-            leftFront.setPower(0);
-            leftRear.setPower(0);
-            rightFront.setPower(0);
-            rightRear.setPower(0);
+        if (cX > (CAMERA_WIDTH/2) + 25){
+            telemetry.addLine("MOVE RIGHT");
+//            moveRight(1);
+        } else if (cX < (CAMERA_WIDTH/2) - 25) {
+            telemetry.addLine("MOVE LEFT");
+//            moveLeft(1);
+        } else if (cX < (CAMERA_WIDTH/2) + 25 && cX > (CAMERA_WIDTH/2) - 25) {
+            telemetry.addLine("IN CENTER");
+
+        } else {
+            telemetry.addLine(">:/");
         }
-        telemetry.addData("cX", cX);
-        telemetry.addData("Action", cX > (CAMERA_WIDTH / 2) + tolerance ? "Moving Right" :
-                cX < (CAMERA_WIDTH / 2) - tolerance ? "Moving Left" :
-                        "Center");
         telemetry.update();
     }
+
     public void initMotores() {
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         leftRear = hardwareMap.get(DcMotor.class, "leftRear");
@@ -204,21 +188,6 @@ public class SampleSearch extends LinearOpMode {
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
-
-
-    public void moveForward(double power) {
-        leftFront.setPower(power);
-        leftRear.setPower(power);
-        rightFront.setPower(power);
-        rightRear.setPower(power);
-    }
-
-    public void moveBackward(double power) {
-        leftFront.setPower(-power);
-        leftRear.setPower(-power);
-        rightFront.setPower(-power);
-        rightRear.setPower(-power);
     }
 
     public void moveLeft(double power) {
