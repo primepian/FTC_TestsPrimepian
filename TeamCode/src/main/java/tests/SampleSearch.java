@@ -19,19 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @TeleOp(name = "SampleSearch")
-
 public class SampleSearch extends LinearOpMode {
 
     public DcMotor leftFront, leftRear, rightFront, rightRear;
     double cX = 0;
     double cY = 0;
     double width = 0;
-
     private OpenCvCamera controlHubCam;
     private static final int CAMERA_WIDTH = 640;
     private static final int CAMERA_HEIGHT = 360;
     public static final double objectWidthInRealWorldUnits = 3.46;
     public static final double focalLength = 560;
+    double power = cX / 320;
 
     @Override
     public void runOpMode() {
@@ -150,7 +149,6 @@ public class SampleSearch extends LinearOpMode {
             Rect boundingRect = Imgproc.boundingRect(contour);
             return boundingRect.width;
         }
-
     }
     public static double getDistance(double width){
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
@@ -158,15 +156,15 @@ public class SampleSearch extends LinearOpMode {
     }
 
     public void moveToSample() {
-        if (cX > (CAMERA_WIDTH/2) + 25){
+        if (cX > 25){
             telemetry.addLine("MOVE RIGHT");
-//            moveRight(1);
-        } else if (cX < (CAMERA_WIDTH/2) - 25) {
+            moveRight();
+        } else if (cX < -25) {
             telemetry.addLine("MOVE LEFT");
-//            moveLeft(1);
-        } else if (cX < (CAMERA_WIDTH/2) + 25 && cX > (CAMERA_WIDTH/2) - 25) {
+            moveLeft();
+        } else if (cX < 25 && cX > -25) {
+            power = 0;
             telemetry.addLine("IN CENTER");
-
         } else {
             telemetry.addLine(">:/");
         }
@@ -190,14 +188,14 @@ public class SampleSearch extends LinearOpMode {
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void moveLeft(double power) {
+    public void moveLeft() {
         leftFront.setPower(-power);
         leftRear.setPower(power);
         rightFront.setPower(power);
         rightRear.setPower(-power);
     }
 
-    public void moveRight(double power) {
+    public void moveRight() {
         leftFront.setPower(power);
         leftRear.setPower(-power);
         rightFront.setPower(-power);
