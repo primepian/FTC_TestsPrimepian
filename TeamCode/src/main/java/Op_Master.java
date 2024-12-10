@@ -10,6 +10,7 @@ public class Op_Master  extends OpMode {
     double servoPositionH = 0.5; // Initial servo position (adjust as needed)
     double servoPositionE = 0.5; // Initial servo position (adjust as needed)
     double increment = 0.01;
+    double Bincrement = 0.1;
     public boolean garra_abierta;
     public boolean barredora;
 
@@ -44,13 +45,13 @@ public class Op_Master  extends OpMode {
         }
 
         if (gamepad2.left_stick_y > 0) {    //MOVER BRAZO FRENTE
-            servoPosition += increment;
+            servoPosition += Bincrement;
             if (servoPosition > 1.0) {
                 servoPosition = 1.0;
             }
             misPosiciones.moverBrazo(servoPosition);
         } else if (gamepad2.left_stick_y < 0) {     //MOVER BRAZO ATRAS
-            servoPosition -= increment;
+            servoPosition -= Bincrement;
             if (servoPosition < 0.0) {
                 servoPosition = 0.0;
             }
@@ -58,13 +59,13 @@ public class Op_Master  extends OpMode {
         }
 
         if (gamepad2.right_stick_y > 0) {   //GARRA MANO FRENTE
-            servoPositionH += increment;
+            servoPositionH += Bincrement;
             if (servoPositionH > 1.0) {
                 servoPositionH = 1.0;
             }
             misPosiciones.moverMano(servoPositionH);
         } else if (gamepad2.right_stick_y < 0) {    //GARRA MANO ATRAS
-            servoPositionH -= increment;
+            servoPositionH -= Bincrement;
             if (servoPositionH < 0.0) {
                 servoPositionH = 0.0;
             }

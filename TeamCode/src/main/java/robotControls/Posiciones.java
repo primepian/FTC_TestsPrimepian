@@ -23,14 +23,19 @@ public class Posiciones {
     public Servo Articulacion_Barredora2;
 
     //vars
-    private static final double TICKS_PER_REVOLUTION = 537.7;   //8192
+    private static final double TICKS_PER_REVOLUTION = 537.7d;   //8192
+    int elevatorTolerance = 50;
 
     //FUNCIONES DE POSICIONES
     public void LanzarBarredora(){
         LBarredora1.setPosition(1.0);
         LBarredora2.setPosition(1.0);
+        Articulacion_Barredora1.setPosition(0.5);
+        Articulacion_Barredora2.setPosition(0.5);
     }
     public void RetraerBarredora(){
+        Articulacion_Barredora1.setPosition(0);
+        Articulacion_Barredora2.setPosition(0);
         LBarredora1.setPosition(0);
         LBarredora2.setPosition(0);
     }
@@ -39,7 +44,6 @@ public class Posiciones {
         moverBrazo(0);
         moverMano(0.5);
         servo_Garra.setPosition(1.0);
-
     }
     public void RecogerSample(){
         elevador(0);
@@ -47,7 +51,39 @@ public class Posiciones {
         moverMano(0.5);
     }
 
-//FUNCIONES DE INICIACION
+//FUNCIONES MOVER COSAS
+    public void moverBrazo(double POS){
+        servo_Brazo1.setPosition(POS);
+        servo_Brazo2.setPosition(-POS);
+    }
+    public void moverMano(double POS){
+        servo_hand.setPosition(POS);
+    }
+    public void elevadorEnfrente(float POWER){
+        elevador1.setPower(POWER);
+        elevador2.setPower(POWER);
+    }
+    public void elevadorAtras(float POWER){
+        elevador1.setPower(-POWER);
+        elevador2.setPower(-POWER);
+    }
+    public void elevador(int targetPos){
+        elevador1.setTargetPosition((int)targetPos);
+        elevador2.setTargetPosition((int)targetPos);
+        elevador1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevador2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if (elevador1.getCurrentPosition() > elevador2.getCurrentPosition() + elevatorTolerance ||
+                elevador1.getCurrentPosition() < elevador2.getCurrentPosition() - elevatorTolerance||
+                elevador2.getCurrentPosition() > elevador1.getCurrentPosition() + elevatorTolerance||
+                elevador2.getCurrentPosition() < elevador1.getCurrentPosition() - elevatorTolerance){
+            elevador1.setPower(0);
+            elevador2.setPower(0);
+        }
+        if (elevador1.getCurrentPosition() > 1000 || elevador2.getCurrentPosition() > 1000){
+
+        }
+    }
+    //FUNCIONES DE INICIACION
     public void initGarra(){
         servo_Garra = hardwareMap.get(Servo.class, "garra");
         servo_Brazo1 = hardwareMap.get(Servo.class, "brazo1");
@@ -75,27 +111,5 @@ public class Posiciones {
         elevador1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevador2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         telemetry.addLine("Elevadores iniciados");
-    }
-//FUNCIONES MOVER COSAS
-    public void moverBrazo(double POS){
-        servo_Brazo1.setPosition(POS);
-        servo_Brazo2.setPosition(-POS);
-    }
-    public void moverMano(double POS){
-        servo_hand.setPosition(POS);
-    }
-    public void elevadorEnfrente(float POWER){
-        elevador1.setPower(POWER);
-        elevador2.setPower(POWER);
-    }
-    public void elevadorAtras(float POWER){
-        elevador1.setPower(-POWER);
-        elevador2.setPower(-POWER);
-    }
-    public void elevador(int targetPos){
-        elevador1.setTargetPosition((int)targetPos);
-        elevador2.setTargetPosition((int)targetPos);
-        elevador1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        elevador2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }

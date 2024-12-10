@@ -30,21 +30,21 @@ public class SampleSearch extends LinearOpMode {
     private static final int CAMERA_HEIGHT = 360;
     public static final double objectWidthInRealWorldUnits = 3.46;
     public static final double focalLength = 560;
-    double power = cX / 320;
+    double power = cX / CAMERA_WIDTH;
 
     @Override
     public void runOpMode() {
 
         initOpenCV();
         initMotores();
-        moveToSample();
+//        moveToSample();
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         FtcDashboard.getInstance().startCameraStream(controlHubCam, 30);
 
         waitForStart();
         while (opModeIsActive()) {
-
+            moveToSample();
             telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
             telemetry.addData("Distance in in", (getDistance(width)));
             telemetry.update();
@@ -156,19 +156,19 @@ public class SampleSearch extends LinearOpMode {
     }
 
     public void moveToSample() {
-        if (cX > 25){
+        if (cX > (CAMERA_WIDTH/2) + 15){
             telemetry.addLine("MOVE RIGHT");
-            moveRight();
-        } else if (cX < -25) {
+//            moveRight();
+        } else if (cX < (CAMERA_WIDTH/2) - 15) {
             telemetry.addLine("MOVE LEFT");
-            moveLeft();
-        } else if (cX < 25 && cX > -25) {
+//            moveLeft();
+        } else if (cX < (CAMERA_WIDTH/2) + 15 && cX > (CAMERA_WIDTH/2) - 15) {
             power = 0;
             telemetry.addLine("IN CENTER");
         } else {
             telemetry.addLine(">:/");
         }
-        telemetry.update();
+
     }
 
     public void initMotores() {
