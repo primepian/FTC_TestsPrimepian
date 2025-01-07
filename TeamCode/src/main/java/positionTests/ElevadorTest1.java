@@ -1,16 +1,16 @@
-package positionTests; //ELEVADOR CON BUMPERS
+package positionTests; // ELEVADOR CON TRIGGERS
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 @TeleOp
-public class ElevadorTest extends LinearOpMode {
+public class ElevadorTest1 extends LinearOpMode {
     public DcMotor elevador1 = null;
     public DcMotor elevador2 = null;
-    private static final double TICKS_PER_REVOLUTION = 537.7;   //8192
-//    float RightTriggerPos = gamepad1.right_trigger;
-//    float LeftTriggerPos = gamepad1.left_trigger;
+    private static final double TICKS_PER_REVOLUTION = 8192;   //537.7
+
     int elevatorTolerance = 50;
     @Override
     public void runOpMode() {
@@ -18,16 +18,21 @@ public class ElevadorTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
+            float fr = gamepad1.right_trigger;
+            float fl = gamepad1.left_trigger;
+
+            String sr = Float.toString(fr);
+            String sl = Float.toString(fl);
+
+            double RightTriggerPos = Double.parseDouble(sr);
+            double LeftTriggerPos = Double.parseDouble(sl);
+
             //ELEVADOR
-            while(gamepad1.right_bumper){  //mover Elevador Arriba
-                elevadorEnfrente(0.7);
+            if(gamepad1.right_trigger > 0){  //mover Elevador Arriba
+                elevadorEnfrente(RightTriggerPos);
             }
-            while(gamepad1.left_bumper){  //mover Elevador Abajo
-                elevadorAtras(0.7);
-            }
-            if(gamepad1.b){
-                elevador1.setPower(0);
-                elevador2.setPower(0);
+            if(gamepad1.left_trigger > 0){  //mover Elevador Abajo
+                elevadorAtras(LeftTriggerPos);
             }
             elevador1.setPower(0);
             elevador2.setPower(0);

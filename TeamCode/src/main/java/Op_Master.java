@@ -8,7 +8,7 @@ public class Op_Master  extends OpMode {
     float LeftTriggerPos = gamepad2.left_trigger;
     double servoPosition = 0.5; // Initial servo position (adjust as needed)
     double servoPositionH = 0.5; // Initial servo position (adjust as needed)
-    double servoPositionE = 0.5; // Initial servo position (adjust as needed)
+    double servoPositionC = 0.5; // Initial servo position (adjust as needed)
     double increment = 0.01;
     double Bincrement = 0.1;
     public boolean garra_abierta;
@@ -71,18 +71,19 @@ public class Op_Master  extends OpMode {
             }
             misPosiciones.moverMano(servoPositionH);
         }
-        if (gamepad2.y) {   //CORREDERA GARRA FRENTE
-            servoPositionE += increment;
-            if (servoPositionE > 1.0) {
-                servoPositionE = 1.0;
+        while (gamepad1.y) {   //CORREDERA GARRA FRENTE
+            servoPositionC += increment;
+            if (servoPositionC > 1.0) {
+                servoPositionC = 1.0;
             }
-            misPosiciones.moverMano(servoPositionE);
-        } else if (gamepad2.a) {    //CORREDERA GARRA ATRAS
-            servoPositionE -= increment;
-            if (servoPositionE < 0.0) {
-                servoPositionE = 0.0;
+            misPosiciones.moverCorredera(servoPositionC);
+        }
+        while (gamepad1.a) {    //CORREDERA GARRA ATRAS
+            servoPositionC -= increment;
+            if (servoPositionC < 0.0) {
+                servoPositionC = 0.0;
             }
-            misPosiciones.moverMano(servoPositionE);
+            misPosiciones.moverCorredera(servoPositionC);
         }
 
 

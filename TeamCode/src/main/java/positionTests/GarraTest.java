@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class GarraTest extends LinearOpMode {
-    double servoPosition = 0.5; // Initial servo position (adjust as needed)
+    double servoBPosition = 0.5; // Initial servo position (adjust as needed)
     double servoPositionH = 0.5; // Initial servo position (adjust as needed)
-    double servoPositionE = 0.5; // Initial servo position (adjust as needed)
+    double servoPositionC = 0.5; // Initial servo position (adjust as needed)
     double increment = 0.01;
     double Bincrement = 0.1;
 
@@ -15,59 +15,62 @@ public class GarraTest extends LinearOpMode {
     public Servo servo_Brazo1;
     public Servo servo_Brazo2;
     public Servo servo_hand;
+    public Servo servo_Corredera1;
+    public Servo servo_Corredera2;
 
     public void runOpMode(){
         initGarra();
         waitForStart();
 
         while (opModeIsActive()){
-            if (gamepad2.x && !garra_abierta){  //abrir garra
+            if (gamepad1.x && !garra_abierta){  //abrir garra
                 servo_Garra.setPosition(1);
                 garra_abierta = true;
             }
-            if (gamepad2.x && garra_abierta){  //cerrar garra
+            if (gamepad1.x && garra_abierta){  //cerrar garra
                servo_Garra.setPosition(0);
                 garra_abierta = false;
             }
-            if (gamepad2.left_stick_y > 0) {    //MOVER BRAZO FRENTE
-                servoPosition += Bincrement;
-                if (servoPosition > 1.0) {
-                    servoPosition = 1.0;
+            if (gamepad1.left_stick_y > 0) {    //MOVER BRAZO FRENTE
+                servoBPosition += Bincrement;
+                if (servoBPosition > 1.0) {
+                    servoBPosition = 1.0;
                 }
-                moverBrazo(servoPosition);
-            } else if (gamepad2.left_stick_y < 0) {     //MOVER BRAZO ATRAS
-                servoPosition -= Bincrement;
-                if (servoPosition < 0.0) {
-                    servoPosition = 0.0;
+                moverBrazo(servoBPosition);
+            } else if (gamepad1.left_stick_y < 0) {     //MOVER BRAZO ATRAS
+                servoBPosition -= Bincrement;
+                if (servoBPosition < 0.0) {
+                    servoBPosition = 0.0;
                 }
-                moverBrazo(servoPosition);
+                moverBrazo(servoBPosition);
             }
 
-            if (gamepad2.right_stick_y > 0) {   //GARRA MANO FRENTE
+            if (gamepad1.right_stick_y > 0) {   //GARRA MANO FRENTE
                 servoPositionH += Bincrement;
                 if (servoPositionH > 1.0) {
                     servoPositionH = 1.0;
                 }
                 moverMano(servoPositionH);
-            } else if (gamepad2.right_stick_y < 0) {    //GARRA MANO ATRAS
+            } else if (gamepad1.right_stick_y < 0) {    //GARRA MANO ATRAS
                 servoPositionH -= Bincrement;
                 if (servoPositionH < 0.0) {
                     servoPositionH = 0.0;
                 }
                 moverMano(servoPositionH);
             }
-            if (gamepad2.y) {   //CORREDERA GARRA FRENTE
-                servoPositionE += increment;
-                if (servoPositionE > 1.0) {
-                    servoPositionE = 1.0;
+            while (gamepad1.y) {   //CORREDERA GARRA FRENTE
+                servoPositionC += increment;
+                if (servoPositionC > 1.0) {
+                    servoPositionC = 1.0;
                 }
-                moverMano(servoPositionE);
-            } else if (gamepad2.a) {    //CORREDERA GARRA ATRAS
-                servoPositionE -= increment;
-                if (servoPositionE < 0.0) {
-                    servoPositionE = 0.0;
+                moverCorredera(servoPositionC);
+            }
+            while (gamepad1.a) {    //CORREDERA GARRA ATRAS
+                servoPositionC -= increment;
+                if (servoPositionC < 0.0) {
+                    servoPositionC = 0.0;
                 }
-                moverMano(servoPositionE);
+                moverCorredera(servoPositionC);
             }
         }
     }
@@ -76,6 +79,8 @@ public class GarraTest extends LinearOpMode {
         servo_Brazo1 = hardwareMap.get(Servo.class, "brazo1");
         servo_Brazo2 = hardwareMap.get(Servo.class, "brazo2");
         servo_hand = hardwareMap.get(Servo.class, "hand");
+        servo_Corredera1 = hardwareMap.get(Servo.class, "Corredera1");
+        servo_Corredera2 = hardwareMap.get(Servo.class, "Corredera2");
         telemetry.addLine("Garra iniciada");
     }
     public void moverBrazo(double POS){
@@ -84,6 +89,10 @@ public class GarraTest extends LinearOpMode {
     }
     public void moverMano(double POS){
         servo_hand.setPosition(POS);
+    }
+    public void moverCorredera(double POS){
+        servo_Corredera1.setPosition(POS);
+        servo_Corredera2.setPosition(-POS);
     }
 
 }

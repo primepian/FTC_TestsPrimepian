@@ -16,6 +16,8 @@ public class Posiciones {
     public Servo servo_Brazo1;
     public Servo servo_Brazo2;
     public Servo servo_hand;
+    public Servo servo_Corredera1;
+    public Servo servo_Corredera2;
     //Barredora
     public Servo LBarredora1;
     public Servo LBarredora2;
@@ -59,6 +61,10 @@ public class Posiciones {
     public void moverMano(double POS){
         servo_hand.setPosition(POS);
     }
+    public void moverCorredera(double POS){
+        servo_Corredera1.setPosition(POS);
+        servo_Corredera2.setPosition(-POS);
+    }
     public void elevadorEnfrente(float POWER){
         elevador1.setPower(POWER);
         elevador2.setPower(POWER);
@@ -89,6 +95,8 @@ public class Posiciones {
         servo_Brazo1 = hardwareMap.get(Servo.class, "brazo1");
         servo_Brazo2 = hardwareMap.get(Servo.class, "brazo2");
         servo_hand = hardwareMap.get(Servo.class, "hand");
+        servo_Corredera1 = hardwareMap.get(Servo.class, "Corredera1");
+        servo_Corredera2 = hardwareMap.get(Servo.class, "Corredera2");
         telemetry.addLine("Garra iniciada");
     }
     public void initBarredora(){

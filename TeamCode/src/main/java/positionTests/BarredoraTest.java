@@ -1,8 +1,5 @@
 package positionTests;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -14,7 +11,9 @@ public class BarredoraTest extends LinearOpMode {
     public boolean barredora;
 
     public void runOpMode(){
+        initBarredora();
         waitForStart();
+
         while (opModeIsActive()){
             //BARREDORA
             if(gamepad1.y && !barredora){  //Lanzar barredora
@@ -36,8 +35,8 @@ public class BarredoraTest extends LinearOpMode {
         telemetry.addLine("Barredora iniciada");
     }
     public void LanzarBarredora(){
-        LBarredora1.setPosition(1.0);
-        LBarredora2.setPosition(1.0);
+        LBarredora1.setPosition(.5);
+        LBarredora2.setPosition(.5);
         Articulacion_Barredora1.setPosition(0.5);
         Articulacion_Barredora2.setPosition(0.5);
     }
