@@ -1,4 +1,4 @@
-package positionTests; //ELEVADOR CON BUMPERS
+package positionTests.Elevador; //ELEVADOR CON BUMPERS
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -20,10 +20,10 @@ public class ElevadorTest extends LinearOpMode {
         while (opModeIsActive()){
             //ELEVADOR
             while(gamepad1.right_bumper){  //mover Elevador Arriba
-                elevadorEnfrente(0.7);
+                elevadorEnfrente(0.8);
             }
             while(gamepad1.left_bumper){  //mover Elevador Abajo
-                elevadorAtras(0.7);
+                elevadorAtras(0.8);
             }
             if(gamepad1.b){
                 elevador1.setPower(0);

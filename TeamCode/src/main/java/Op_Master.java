@@ -27,7 +27,7 @@ public class Op_Master  extends OpMode {
 * ARTICULACION GARRA[right_stick_y]
 * CORREDERA GARRA [y,a]
 * ELEVADOR [right,left trigger]
-* BARREDORA [Gpad1{y,a}]
+* BARREDORA [{RBumper,LBumper}]
 * RECOGER SAMPLE [dpad_up]
 * RECOGER SPECIMEN[dpad_down]
 */

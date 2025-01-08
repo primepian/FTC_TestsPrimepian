@@ -1,4 +1,4 @@
-package positionTests; // ELEVADOR CON TRIGGERS
+package positionTests.Elevador; // ELEVADOR CON TRIGGERS
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

@@ -1,6 +1,7 @@
-package positionTests;
+package positionTests.Barredora;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class BarredoraTest extends LinearOpMode {
@@ -8,6 +9,7 @@ public class BarredoraTest extends LinearOpMode {
     public Servo LBarredora2;
     public Servo Articulacion_Barredora1;
     public Servo Articulacion_Barredora2;
+    public CRServo SBarredora;
     public boolean barredora;
 
     public void runOpMode(){
@@ -16,13 +18,16 @@ public class BarredoraTest extends LinearOpMode {
 
         while (opModeIsActive()){
             //BARREDORA
-            if(gamepad1.y && !barredora){  //Lanzar barredora
+            if(gamepad1.right_bumper && !barredora){  //Lanzar barredora
                 LanzarBarredora();
                 barredora = true;
             }
-            if(gamepad1.a && barredora){  //retraer barredora
+            if(gamepad1.left_bumper && barredora){  //retraer barredora
                 RetraerBarredora();
                 barredora = false;
+            }
+            while (gamepad1.b){
+                SBarredora.setPower(1.0);
             }
         }
     }
@@ -32,6 +37,7 @@ public class BarredoraTest extends LinearOpMode {
         LBarredora2.setDirection(Servo.Direction.REVERSE);
         Articulacion_Barredora1 = hardwareMap.get(Servo.class, "A_Barredora1");
         Articulacion_Barredora2 = hardwareMap.get(Servo.class, "A_Barredora2");
+        SBarredora = hardwareMap.get(CRServo.class, "SBarredora");
         telemetry.addLine("Barredora iniciada");
     }
     public void LanzarBarredora(){
