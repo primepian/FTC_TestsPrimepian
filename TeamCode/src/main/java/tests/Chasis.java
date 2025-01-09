@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp
+/*@TeleOp*/       //<<<<<<<UNCOMENT>>>>>>>
 public class Chasis extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.

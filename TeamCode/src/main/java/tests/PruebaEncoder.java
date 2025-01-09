@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp
+/*@TeleOp*/        //<<<<<<<UNCOMENT>>>>>>>
 public class PruebaEncoder extends OpMode {
     private DcMotor motor;
     private static final double TICKS_PER_REVOLUTION = 8192; // Update based on your motor's gear ratio

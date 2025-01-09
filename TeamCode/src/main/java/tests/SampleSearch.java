@@ -18,7 +18,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name = "SampleSearch")
+/*@TeleOp(name = "SampleSearch")*/        //<<<<<<<UNCOMENT>>>>>>>
 public class SampleSearch extends LinearOpMode {
 
     public DcMotor leftFront, leftRear, rightFront, rightRear;

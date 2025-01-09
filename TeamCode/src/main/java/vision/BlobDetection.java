@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name = "Blob_Detection")
+/*@TeleOp(name = "Blob_Detection")*/    //<<<<<<<UNCOMENT>>>>>>>
 
 public class BlobDetection extends LinearOpMode {
 

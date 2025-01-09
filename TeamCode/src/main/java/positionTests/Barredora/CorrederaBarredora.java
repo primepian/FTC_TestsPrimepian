@@ -1,10 +1,11 @@
-package positionTests.Garra;
+package positionTests.Barredora;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+
 @TeleOp
-public class GarraCorredera extends LinearOpMode {
+public class CorrederaBarredora extends LinearOpMode {
 
     public Servo servo_Corredera1;
     public Servo servo_Corredera2;
