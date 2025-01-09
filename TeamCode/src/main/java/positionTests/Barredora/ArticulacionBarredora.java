@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ArticulacionBarredora extends LinearOpMode {
     public Servo Articulacion_Barredora1;
     public Servo Articulacion_Barredora2;
+
+    boolean SampleInChamber;
     DcMotor Barredora;
 
     public void runOpMode(){

@@ -9,9 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class ElevadorTest1 extends LinearOpMode {
     public DcMotor elevador1 = null;
     public DcMotor elevador2 = null;
-    private static final double TICKS_PER_REVOLUTION = 8192;   //537.7
-
-    int elevatorTolerance = 50;
+//    private static final double TICKS_PER_REVOLUTION = 8192;   //537.7
+//    int elevatorTolerance = 50;
     @Override
     public void runOpMode() {
         initElevador();

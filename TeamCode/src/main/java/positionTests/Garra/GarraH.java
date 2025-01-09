@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class GarraH extends LinearOpMode {
 
     double servoPositionH = 0.5; // Initial servo position (adjust as needed)
-    double Bincrement = 0.005;
+    double Aincrement = 0.005;
     public Servo servo_hand;
 
     public void runOpMode(){
@@ -17,11 +17,11 @@ public class GarraH extends LinearOpMode {
         while (opModeIsActive()){
 
             if (gamepad1.right_stick_y > 0) {   // GARRA MANO FRENTE
-                servoPositionH = Math.min(servoPositionH + Bincrement, 1.0);
+                servoPositionH = Math.min(servoPositionH + Aincrement, 1.0);
                 moverMano(servoPositionH);
             }
             else if (gamepad1.right_stick_y < 0) {    // GARRA MANO ATRAS
-                servoPositionH = Math.max(servoPositionH - Bincrement, 0.0);
+                servoPositionH = Math.max(servoPositionH - Aincrement, 0.0);
                 moverMano(servoPositionH);
             }
 

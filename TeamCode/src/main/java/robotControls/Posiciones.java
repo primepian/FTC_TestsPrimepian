@@ -25,7 +25,7 @@ public class Posiciones {
     public Servo Articulacion_Barredora2;
 
     //vars
-    private static final double TICKS_PER_REVOLUTION = 537.7d;   //8192
+//    private static final double TICKS_PER_REVOLUTION = 537.7d;   //8192
     int elevatorTolerance = 50;
 
     //FUNCIONES DE POSICIONES

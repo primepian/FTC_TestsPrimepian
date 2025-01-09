@@ -1,12 +1,13 @@
 package positionTests.Barredora;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-
+@Config
 @TeleOp
 public class CorrederaBarredora extends LinearOpMode {
-
+    public static double xd1 = 0.4;
     public Servo servo_Corredera1;
     public Servo servo_Corredera2;
 
@@ -16,7 +17,7 @@ public class CorrederaBarredora extends LinearOpMode {
 
         while (opModeIsActive()){
             if (gamepad1.y){
-                moverCorredera(0.5, 0.5);
+                moverCorredera(xd1, 1 - xd1);
             } else if (gamepad1.a) {
                 moverCorredera(0.0,1.0);
             }

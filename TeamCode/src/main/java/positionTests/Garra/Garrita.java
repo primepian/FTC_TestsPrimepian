@@ -1,8 +1,11 @@
 package positionTests.Garra;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-
+@Config
+@TeleOp
 public class Garrita extends LinearOpMode {
 
     public boolean garra_abierta = false;
@@ -25,7 +28,7 @@ public class Garrita extends LinearOpMode {
         }
     }
     public void initGarra() {
-        servo_Garra = hardwareMap.get(Servo.class, "garra");
+
         telemetry.addLine("Garra iniciada");
     }
 }
