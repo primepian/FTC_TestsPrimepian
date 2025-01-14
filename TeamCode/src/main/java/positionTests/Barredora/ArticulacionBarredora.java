@@ -16,23 +16,27 @@ public class ArticulacionBarredora extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            if (gamepad1.right_bumper){
+            if (gamepad1.dpad_up) {
                 Articulacion(0.5,0.5);
             }
-            if (gamepad1.left_bumper){
+            if (gamepad1.dpad_down){
                 Articulacion(0.0,1.0);
             }
-            while (gamepad1.b){
+            if (gamepad1.a){
                 Barredora.setPower(1.0);
+            } else if (gamepad1.x){
+                Barredora.setPower(-1.0);
+            } else{
+                Barredora.setPower(0.0);
             }
         }
     }
     public void initBarredora(){
-
         Articulacion_Barredora1 = hardwareMap.get(Servo.class, "A_Barredora1");
         Articulacion_Barredora2 = hardwareMap.get(Servo.class, "A_Barredora2");
         Barredora = hardwareMap.get(DcMotor.class, "Barredora");
         telemetry.addLine("Barredora iniciada");
+        telemetry.update();
     }
     public void Articulacion(double POS, double POS2){
         Articulacion_Barredora1.setPosition(POS);

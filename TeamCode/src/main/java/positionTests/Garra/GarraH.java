@@ -1,12 +1,14 @@
 package positionTests.Garra;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+@Config
 @TeleOp
 public class GarraH extends LinearOpMode {
 
-    double servoPositionH = 0.5; // Initial servo position (adjust as needed)
+    double servoPositionH = 0.0; // Initial servo position (adjust as needed)
     double Aincrement = 0.005;
     public Servo servo_hand;
 

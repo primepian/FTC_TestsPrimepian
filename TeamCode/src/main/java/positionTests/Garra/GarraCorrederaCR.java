@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 
-@TeleOp
+//@TeleOp
 public class GarraCorrederaCR extends LinearOpMode {
     public CRServo servo_Corredera1;
     public CRServo servo_Corredera2;

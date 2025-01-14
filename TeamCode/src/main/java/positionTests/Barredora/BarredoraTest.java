@@ -1,55 +1,62 @@
 package positionTests.Barredora;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@TeleOp(name = "Motor Test ")
 public class BarredoraTest extends LinearOpMode {
-    public Servo CBarredora1;
-    public Servo CBarredora2;
+    DcMotor motor;
     public Servo Articulacion_Barredora1;
     public Servo Articulacion_Barredora2;
-    public CRServo SBarredora;
-    public boolean barredora;
+    DcMotor Barredora;
+    //     ticks = 537.7;
+    int newTarget = 90;
+    public int nsdkl(int degrees){return (int) Math.round(degrees * 1.4936111);}
 
     public void runOpMode(){
         initBarredora();
         waitForStart();
 
-        while (opModeIsActive()){
-            //BARREDORA
-            if(gamepad1.right_bumper && !barredora){  //Lanzar barredora
-                LanzarBarredora();
-                barredora = true;
+        while (opModeIsActive()) {
+            if (gamepad1.right_bumper) {
+                motor.setTargetPosition(nsdkl(newTarget));
+                motor.setPower(0.6);
+                sleep(1200);
+                Articulacion(0.5,0.5);
             }
-            if(gamepad1.left_bumper && barredora){  //retraer barredora
-                RetraerBarredora();
-                barredora = false;
+            if (gamepad1.left_bumper) {
+                Articulacion(0.0,1.0);
+                sleep(1200);
+                motor.setTargetPosition(0);
+                motor.setPower(0.6);
             }
-            while (gamepad1.b){
-                SBarredora.setPower(1.0);
+            telemetry.addData("motorPos", motor.getTargetPosition());
+
+            if (gamepad1.a){
+                Barredora.setPower(1.0);
+            } else if (gamepad1.x){
+                Barredora.setPower(-1.0);
+            } else{
+                Barredora.setPower(0.0);
             }
         }
     }
     public void initBarredora(){
-        CBarredora1 = hardwareMap.get(Servo.class, "L_Barredora1");
-        CBarredora2 = hardwareMap.get(Servo.class, "L_Barredora2");
-        CBarredora2.setDirection(Servo.Direction.REVERSE);
+        motor = hardwareMap.get(DcMotor.class, "Corredera");
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor.setTargetPosition(nsdkl(newTarget));
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Articulacion_Barredora1 = hardwareMap.get(Servo.class, "A_Barredora1");
         Articulacion_Barredora2 = hardwareMap.get(Servo.class, "A_Barredora2");
-        SBarredora = hardwareMap.get(CRServo.class, "SBarredora");
+        Barredora = hardwareMap.get(DcMotor.class, "Barredora");
         telemetry.addLine("Barredora iniciada");
+        telemetry.update();
     }
-    public void LanzarBarredora(){
-        CBarredora1.setPosition(.5);
-        CBarredora2.setPosition(.5);
-        Articulacion_Barredora1.setPosition(0.5);
-        Articulacion_Barredora2.setPosition(0.5);
-    }
-    public void RetraerBarredora(){
-        Articulacion_Barredora1.setPosition(0);
-        Articulacion_Barredora2.setPosition(0);
-        CBarredora1.setPosition(0);
-        CBarredora2.setPosition(0);
+    public void Articulacion(double POS, double POS2){
+        Articulacion_Barredora1.setPosition(POS);
+        Articulacion_Barredora2.setPosition(POS2);
     }
 }

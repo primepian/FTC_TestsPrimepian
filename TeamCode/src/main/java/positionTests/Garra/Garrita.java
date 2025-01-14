@@ -16,7 +16,6 @@ public class Garrita extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-
             if (gamepad1.x && !garra_abierta) {  //abrir garra
                 servo_Garra.setPosition(0.5);
                 garra_abierta = true;
@@ -25,10 +24,11 @@ public class Garrita extends LinearOpMode {
                 servo_Garra.setPosition(0);
                 garra_abierta = false;
             }
+            telemetry.addData("garra abierta = ", garra_abierta);
         }
     }
     public void initGarra() {
-
+        servo_Garra = hardwareMap.get(Servo.class, "servo");
         telemetry.addLine("Garra iniciada");
     }
 }
