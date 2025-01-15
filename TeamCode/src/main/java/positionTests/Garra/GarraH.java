@@ -31,6 +31,7 @@ public class GarraH extends LinearOpMode {
                 moverMano(servo_hand.getPosition());
             }
 
+
             telemetry.addData("Garra Position", servoPositionH);
             telemetry.update();
         }

@@ -1,8 +1,10 @@
 package positionTests.Garra;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@TeleOp
 public class GarraCompleta extends LinearOpMode {
     //      <<Declarar webadas>>
     public Servo CorrederaGarra;
@@ -39,13 +41,13 @@ public class GarraCompleta extends LinearOpMode {
             }
 
             // MOVER BRAZO FRENTE
-            if (gamepad1.left_stick_y > 0) {
+            if (gamepad1.left_stick_y > 0.3) {
                 servoBPosition1 = Math.min(servoBPosition1 + Bincrement, 1.0);
                 servoBPosition2 = Math.max(servoBPosition2 - Bincrement, 0.4);
                 moverBrazo(servoBPosition1, servoBPosition2);
             }
             // MOVER BRAZO ATRÁS
-            else if (gamepad1.left_stick_y < 0) {
+            else if (gamepad1.left_stick_y < -0.3) {
                 servoBPosition1 = Math.max(servoBPosition1 - Bincrement, 0.4);
                 servoBPosition2 = Math.min(servoBPosition2 + Bincrement, 1.0);
                 moverBrazo(servoBPosition1, servoBPosition2);
@@ -90,12 +92,12 @@ public class GarraCompleta extends LinearOpMode {
         }
     }
     public void initGarra(){
-        CorrederaGarra = hardwareMap.get(Servo.class, "Corredera1");
-        CorrederaGarra2 = hardwareMap.get(Servo.class, "Corredera2");
-        servo_Brazo1 = hardwareMap.get(Servo.class, "brazo1");
-        servo_Brazo2 = hardwareMap.get(Servo.class, "brazo2");
-        ArticulacionGarra = hardwareMap.get(Servo.class, "hand");
-        servo_Garra = hardwareMap.get(Servo.class, "garra");
+        CorrederaGarra = hardwareMap.get(Servo.class, "Corredera1");//1 exp
+        CorrederaGarra2 = hardwareMap.get(Servo.class, "Corredera2");//2 Contrl
+        servo_Brazo1 = hardwareMap.get(Servo.class, "brazo1");//3 exp
+        servo_Brazo2 = hardwareMap.get(Servo.class, "brazo2");//0 Control
+        ArticulacionGarra = hardwareMap.get(Servo.class, "hand");//1 cntrl
+        servo_Garra = hardwareMap.get(Servo.class, "garra");//2 exp
         ArticulacionGarra.setPosition(0.5);
         telemetry.addLine("Garra iniciada");
         telemetry.addLine("Garra iniciada");

@@ -46,6 +46,7 @@ public class BarredoraTest extends LinearOpMode {
     }
     public void initBarredora(){
         motor = hardwareMap.get(DcMotor.class, "Corredera");
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setTargetPosition(nsdkl(newTarget));
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

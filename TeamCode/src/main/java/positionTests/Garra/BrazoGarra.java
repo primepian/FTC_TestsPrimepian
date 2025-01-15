@@ -20,14 +20,14 @@ public class BrazoGarra extends LinearOpMode {
 
         while (opModeIsActive()) {
             // MOVER BRAZO FRENTE
-            if (gamepad1.left_stick_y > 0) {
+            if (gamepad1.left_stick_y > 0.3) {
                 servoBPosition1 = Math.min(servoBPosition1 + Bincrement, 1.0);
                 servoBPosition2 = Math.max(servoBPosition2 - Bincrement, 0.4);
                 moverBrazo(servoBPosition1, servoBPosition2);
             }
 
             // MOVER BRAZO ATRÁS
-            else if (gamepad1.left_stick_y < 0) {
+            else if (gamepad1.left_stick_y < -0.3) {
                 servoBPosition1 = Math.max(servoBPosition1 - Bincrement, 0.4);
                 servoBPosition2 = Math.min(servoBPosition2 + Bincrement, 1.0);
                 moverBrazo(servoBPosition1, servoBPosition2);
